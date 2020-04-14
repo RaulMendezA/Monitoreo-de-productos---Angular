@@ -1,0 +1,45 @@
+<li class="border border-primary list-unstyled mb-3">
+  <div class="row">
+    <div class="media col">
+      <img class="mr-3 ml-3 mt-3 media-left" src="https://picsum.photos/50/50?image={{producto.uid}}"
+        alt="Generic placeholder image">
+      <div class="media-body">
+        <h4 class="mt-0 mb-1">{{producto.nombre}}</h4>
+        <p>Precio (MXN): ${{producto.precio}}</p>
+        <p>marca: {{producto.marca}}</p>
+        <p>Descripción: {{producto.descripcion}}</p>
+        <p>Existencia: {{producto.existencia}}</p>
+      </div>
+
+      <div class="media-right col-2 mt-3">
+        <div class="row" *ngIf="isInProductos">
+          <label class="btn btn-success">
+            <input type="checkbox" (click)="addToCart()" ng-model="activo" name="" id="" autocomplete="off">
+          </label>
+        </div>
+
+        <div class="row" (click)="editProducto()">
+          <a name="" id="" class="btn btn-primary" role="button"><i class="fas fa-edit"></i></a> <!-- href="#" -->
+        </div>
+
+        <div class="row mt-3" (click)="detalleProducto()">
+          <a name="" id="" class="btn btn-primary" role="button"><i class="fas fa-search"></i></a>
+        </div>
+
+        <div class="row mt-3 mb-3" (click)="borrarProducto()" *ngIf="!isInProductos">
+          <!-- *ngIf="!isInProductos" -->
+          <a name="" id="" class="btn btn-danger" role="button">
+            <i class="fas fa-trash-alt "></i></a>
+        </div>
+
+        <div class="row mt-3 mb-3" (click)="borrarProductoInv()" *ngIf="isInProductos">
+          <a name="" id="" class="btn btn-danger" role="button">
+            <i class="fas fa-trash-alt "></i></a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+
+</li>

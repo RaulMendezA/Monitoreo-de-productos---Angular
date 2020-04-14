@@ -1,0 +1,67 @@
+<!-- navs -->
+<nav aria-label="breadcrumb" *ngIf="isInProductos">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item active" aria-current="page"><b>Inventario</b></li>
+  </ol>
+</nav>
+
+<nav aria-label="breadcrumb" *ngIf="!isInProductos">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item active" aria-current="page"><b>Monitoreo</b></li>
+  </ol>
+</nav>
+
+<!-- lista -->
+<div class="container-fluid">
+
+  <!-- searchbar y buttons -->
+  <div class="row" *ngIf="isInProductos">
+    <div class="col-4">
+      <input type="text" class="form-control" [(ngModel)]="busqueda" (input)="activateButton()" id=""   (keyup)="buscar()" placeholder="Busca por nombre, marca o descripción"> <!-- class="form-control" name="" id="" aria-describedby="helpId" placeholder="" -->
+    </div>
+
+    <div>
+      <a name="" id="" class="btn btn-primary" style="color: white" [class.disabled]="!activar" (click)="buscar()" role="button">Buscar producto</a>
+    </div>
+
+    <div class="ml-2">
+      <button class="btn btn-success" *ngIf="isInProductos" (click)="sendToMonitor()" data-toggle="modal"
+        data-target="#modelId"> Añadir seleccionados a monitoreados </button>
+    </div>
+  </div>
+
+  <!-- alerts -->
+  <br>
+  <div class="alert alert-danger" role="alert" *ngIf="resBusqueda.length < 1 ">
+    <strong>Ningún producto concuerda con la búsqueda</strong>
+  </div>
+
+  <h4 *ngIf="isInProductos">
+    <span class="badge badge-secondary">{{contMonitor}}</span> <!-- no decrementa -->
+    artículo<span *ngIf="contMonitor > 1">s</span>
+    seleccionado<span *ngIf="contMonitor > 1">s</span>.
+  </h4>
+
+  <!-- items/cards -->
+  <div class="productos_" *ngIf="isInProductos">
+    <app-producto-item *ngFor="let p of resBusqueda" [producto]="p" (detailHandler)="detalleProducto($event)" (editHandler)="editProducto($event)"
+      (monitorAdder)="addToMonitor($event)" (productDeleter)="borrarProductoInv($event)">
+    </app-producto-item>
+  </div>
+
+  <div class="productos_" *ngIf="!isInProductos">
+    <app-producto-item *ngFor="let p of monitor" [producto]="p" (detailHandler)="detalleProducto($event)" (editHandler)="editProducto($event)"
+    (monitorAdder)="addToMonitor($event)" (productDeleter)="borrarProducto($event)">
+    </app-producto-item>
+  </div>
+
+  <hr>
+
+  <!-- <div class=" mt-2">
+    <ul>
+      AQUÍ PONES EL COMPONENTE -- cuál? ??
+    </ul>
+  </div>
+ -->
+
+</div>

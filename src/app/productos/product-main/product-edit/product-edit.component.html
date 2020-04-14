@@ -1,0 +1,202 @@
+<div>
+    <nav *ngIf="!isInEdit" class="nav justify-content-center">
+      <!-- Esta nav sólo fue para probar la página de nuevo producto (no logré hacerla funcionar)
+        Pero la de edit sí carga con el nav del main! -->
+        <a class="nav-link" href="#" routerLink="/products"> Lista</a>
+        <a class="nav-link" href="#" routerLink="/products/new" (click)="rout()">Nuevo producto</a>
+        <a class="nav-link" href="#" routerLink="/monitoreo"> Monitoreo</a>
+      </nav>
+
+  <h2 *ngIf="isInEdit">Editar producto</h2>
+  <h2 *ngIf="!isInEdit">Nuevo producto</h2>
+  <hr>
+
+  <form *ngIf="!isInEdit" #f="ngForm" (ngSubmit)="procesarFormulario(f)">
+    <div class="media">
+      <a class="d-flex align-self-bottom" href="#">
+        <img class="mr-3" src="https://picsum.photos/id/{{producto.uid}}/100/100" alt="Generic placeholder image">
+      </a>
+      <div class="media-body">
+        <div class="form-group" *ngIf="isInEdit">
+          <label for="">uid (clave de producto)</label>
+          <input type="number" class="form-control" min="0" disabled required >
+        </div>
+        <div class="form-group" *ngIf="!isInEdit">
+          <label for="">uid (clave de producto)</label>
+          <input type="number" class="form-control" id="uid" name="uid" [(ngModel)]="productoNuevo.uid" min="0" disabled
+            required value="{{productos.length +1}}">
+        </div>
+
+        <div class="form-group">
+          <label for="nombre">Nombre de producto</label>
+          <input id="nombre" [(ngModel)]="productoNuevo.nombre" minlength="2" (blur)="nombreCorrecto()"
+            [class.err]="!nombreCorrecto()" type="text" class="form-control" required >
+          <p *ngIf="productoNuevo.nombre.length>=2 && !nombreCorrecto()"> Nombre incorrecto</p>
+        </div>
+        <div class="form-group">
+          <label for="marca">Marca</label>
+          <input type="text" id="marca" required [(ngModel)]="productoNuevo.marca" name="marca">
+        </div>
+        <div class="form-group">
+          <label for="">Precio</label>
+          <input type="number" id="precio" name="precio" [(ngModel)]="productoNuevo.precio" class="form-control" required
+            >
+        </div>
+        <div class="form-group">
+          <label for="">Breve descripción</label>
+          <input type="text" class="form-control" id="descripcion" name="descripcion" [(ngModel)]="productoNuevo.descripcion"
+            required >
+        </div>
+        <div class="form-group">
+          <label for="">Existencia</label>
+          <input type="number" id="existencia" name="existencia" [(ngModel)]="productoNuevo.existencia" class="form-control"
+            required >
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-2">
+        <label for="">Atributo</label>
+        <input #v1 type="text" class="form-control">
+      </div>
+      <div class="col-2">
+        <label for="">Valor</label>
+        <input #v2 type="text" class="form-control">
+      </div>
+      <div class="col-2">
+        <label for="">Unidad</label>
+        <input #v3 type="text" class="form-control">
+      </div>
+
+      <div>
+        <label for="" style="color:white">añadir</label>
+        <a name="" id="" class="form-control btn btn-success" href="#" role="button"> <i
+            class="fas fa-plus-circle    "></i></a>
+      </div>
+    </div>
+
+    <div>
+      <table class="table mt-3">
+        <thead>
+          <tr>
+            <th>Atributo</th>
+            <th>Valor</th>
+            <th>Unidad</th>
+            <th>Borrar</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of producto.especificacion; let i = index">
+            <td scope="row">{{item.atributo}}</td>
+            <td>{{item.valor}}</td>
+            <td>{{item.unidad}}</td>
+            <td><button class="btn btn-primary"><i class="fas fa-trash "></i></button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <input type="submit" class="btn btn-primary" value="Guardar" [disabled]="!validoTodo()">
+    <button (click)="cancelar()" type="button" id="btCancelar" class="btn btn-secondary ml-3" data-toggle="modal"
+      data-target="#modelId">
+      Cancelar
+    </button>
+
+    <p> Datos del producto nuevo: </p>
+    <p> {{productoNuevo |json}} </p>
+
+  </form>
+
+  <!--  -->
+
+  <form *ngIf="isInEdit" #f="ngForm" (ngSubmit)="procesarFormulario(f)">
+    <div class="media">
+      <a class="d-flex align-self-bottom" href="#">
+        <img class="mr-3" src="https://picsum.photos/id/{{producto.uid}}/100/100" alt="Generic placeholder image">
+      </a>
+      <div class="media-body">
+        <div class="form-group" *ngIf="isInEdit">
+          <label for="">uid (clave de producto)</label>
+          <input type="number" class="form-control" min="0" disabled required value="{{producto.uid}}">
+        </div>
+        <div class="form-group" *ngIf="!isInEdit">
+          <label for="">uid (clave de producto)</label>
+          <input type="number" class="form-control" min="0" disabled required value="{{productos.length +1}}">
+        </div>
+
+        <div class="form-group">
+          <label for="">Nombre de producto</label>
+          <input type="text" class="form-control" required value="{{producto.nombre}}">
+        </div>
+        <div class="form-group">
+          <label for="">Marca</label>
+          <select class="form-control" name="marca">
+            <option value="">Seleccionar una opción</option>
+            <option> </option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="">Precio</label>
+          <input type="number" class="form-control" required value="{{producto.precio}}">
+        </div>
+        <div class="form-group">
+          <label for="">Breve descripción</label>
+          <input type="text" class="form-control" required value="{{producto.descripcion}}">
+        </div>
+        <div class="form-group">
+          <label for="">Existencia</label>
+          <input type="number" class="form-control" required value="{{producto.existencia}}">
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-2">
+        <label for="">Atributo</label>
+        <input #v1 type="text" class="form-control">
+      </div>
+      <div class="col-2">
+        <label for="">Valor</label>
+        <input #v2 type="text" class="form-control">
+      </div>
+      <div class="col-2">
+        <label for="">Unidad</label>
+        <input #v3 type="text" class="form-control">
+      </div>
+
+      <div>
+        <label for="" style="color:white">añadir</label>
+        <a name="" id="" class="form-control btn btn-success" href="#" role="button"> <i
+            class="fas fa-plus-circle    "></i></a>
+      </div>
+    </div>
+
+    <div>
+      <table class="table mt-3">
+        <thead>
+          <tr>
+            <th>Atributo</th>
+            <th>Valor</th>
+            <th>Unidad</th>
+            <th>Borrar</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of producto.especificacion; let i = index">
+            <td scope="row">{{item.atributo}}</td>
+            <td>{{item.valor}}</td>
+            <td>{{item.unidad}}</td>
+            <td><button class="btn btn-primary"><i class="fas fa-trash "></i></button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <input type="submit" class="btn btn-primary" value="Guardar" [disabled]="!validoTodo()">
+    <button (click)="cancelar()" type="button" id="btCancelar" class="btn btn-secondary ml-3" data-toggle="modal"
+      data-target="#modelId">
+      Cancelar
+    </button>
+
+  </form>
+</div>
